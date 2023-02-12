@@ -1,29 +1,35 @@
-import React from 'react';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import Box from '@mui/material/Box';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import frLocale from 'date-fns/locale/fr';
-import MenuItem from '@mui/material/MenuItem';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
+import React from "react";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import frLocale from "date-fns/locale/fr";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 
-const AttendanceForm = () => {
+const AttendanceForm = ({ leaders }) => {
   return (
     <Box
       component='form'
       sx={{
         p: 4,
-        m: 2,
-        display: 'flex',
-        alignItems: 'flex-start',
-        flexDirection: 'column',
+        mx: "auto",
+        my: 5,
+        width: "75%",
+        alignSelf: "auto",
+
+        display: "flex",
+        alignItems: "stretch",
+        flexDirection: "column",
+
+        borderColor: "primary.main",
+        borderRadius: 2,
+        border: 1,
       }}
     >
       <FormControl
@@ -38,56 +44,15 @@ const AttendanceForm = () => {
         </FormLabel>
         <Select native defaultValue='' id='areaLeader'>
           <option aria-label='None' value='' />
-
-          <optgroup label='----张洁慈长老----'>
-            <option>黄惠香</option>
-            <option>黄仁意</option>
-            <option>杨意聪</option>
-            <option>周素珍</option>
-          </optgroup>
-
-          <optgroup label='----张顺恩区长----'>
-            <option>何道良</option>
-            <option>李环环</option>
-            <option>刘珮珊</option>
-            <option>赵德福</option>
-          </optgroup>
-          <optgroup label='----萧植仁区长----'>
-            <option>何紫雄</option>
-            <option>华曼萍</option>
-            <option>黄惠和</option>
-            <option>黄健光</option>
-            <option>卓玉庭</option>
-            <option>张才华</option>
-          </optgroup>
-          <optgroup label='--雷明珠区长--'>
-            <option>郭桂珠</option>
-            <option>黄健威</option>
-            <option>雷小萍</option>
-            <option>杨善荣</option>
-            <option>陈玉玲</option>
-          </optgroup>
-          <optgroup label='--龙淑英区长--'>
-            <option>戴蓝英</option>
-            <option>李慧仪</option>
-            <option>李秀维</option>
-            <option>胡世清</option>
-          </optgroup>
-          <optgroup label='--罗威玲长老--'>
-            <option>黄运梅</option>
-            <option>李晓薇</option>
-            <option>李燕玉</option>
-            <option>沈玉珠</option>
-            <option>邱玉莲</option>
-            <option>佘慧珍</option>
-            <option>李慧仪</option>
-          </optgroup>
-          <optgroup label='--罗凯伦长老--'>
-            <option>练秋娥</option>
-            <option>邬菊玲</option>
-            <option>谢美玲</option>
-            <option>钟惠梅</option>
-          </optgroup>
+          <>
+            {leaders?.map((leader = {}) => (
+              <optgroup key={leader.name} label={`----${leader.name}----`}>
+                {leader?.areaLeaders?.map((areaLeader) => (
+                  <option key={areaLeader}>{areaLeader}</option>
+                ))}
+              </optgroup>
+            ))}
+          </>
         </Select>
       </FormControl>
 
@@ -105,6 +70,7 @@ const AttendanceForm = () => {
           id='attendeeNumber'
           type='number'
           variant='standard'
+          InputProps={{ inputProps: { min: 1, max: 100 } }}
         />
       </FormControl>
 
@@ -117,7 +83,12 @@ const AttendanceForm = () => {
         <FormLabel required component='legend'>
           新朋友人数
         </FormLabel>
-        <TextField id='newAttendeeNumber' type='number' variant='standard' />
+        <TextField
+          id='newAttendeeNumber'
+          type='number'
+          variant='standard'
+          InputProps={{ inputProps: { min: 1, max: 100 } }}
+        />
       </FormControl>
 
       <FormControl
@@ -134,7 +105,12 @@ const AttendanceForm = () => {
         </LocalizationProvider>
       </FormControl>
 
-      <FormControl component='fieldset'>
+      <FormControl
+        sx={{
+          mb: 4,
+        }}
+        variant='standard'
+      >
         <FormLabel required component='legend'>
           小组活动
         </FormLabel>
@@ -177,13 +153,13 @@ const AttendanceForm = () => {
         </FormLabel>
         <RadioGroup
           aria-label='message'
-          defaultValue='讲道信息（每日研经）'
+          defaultValue='主日信息'
           name='radio-buttons-group'
         >
           <FormControlLabel
-            value='讲道信息（每日研经）'
+            value='主日信息'
             control={<Radio />}
-            label='讲道信息（每日研经）'
+            label='主日信息'
           />
           <FormControlLabel
             value='认识神 PPT'
@@ -191,9 +167,9 @@ const AttendanceForm = () => {
             label='认识神 PPT'
           />
           <FormControlLabel
-            value='每日研经释义'
+            value='每日活水'
             control={<Radio />}
-            label='每日研经释义'
+            label='每日活水'
           />
           <FormControlLabel
             value='无（没有聚会）'
@@ -202,6 +178,16 @@ const AttendanceForm = () => {
           />
           <FormControlLabel value='其他' control={<Radio />} label='其他' />
         </RadioGroup>
+      </FormControl>
+      <FormControl>
+        <TextField
+          id='standard-multiline-static'
+          label='备注'
+          multiline
+          rows={4}
+          defaultValue=''
+          variant='standard'
+        />
       </FormControl>
     </Box>
   );
